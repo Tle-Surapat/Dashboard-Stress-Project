@@ -3,9 +3,12 @@
 import { useState, useEffect } from "react";
 import Navbar_DB from "@/components/Navbar_DB";
 import Footer from "@/components/Footer";
-import PieChart from "@/components/PieChart";
-import SubjectCard from "@/components/SubjectCard";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+
+// Dynamically import components to prevent SSR-related errors
+const PieChart = dynamic(() => import("@/components/PieChart"), { ssr: false });
+const SubjectCard = dynamic(() => import("@/components/SubjectCard"), { ssr: false });
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -14,6 +17,16 @@ export default function DashboardPage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setWindowWidth(window.innerWidth);
+
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
     }
   }, []);
 
@@ -55,7 +68,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-lg p-10 shadow-md">
             <h2 className="text-3xl text-navy mb-4">Summary</h2>
             <div className="mt-8 w-full h-auto">
-              <PieChart data={summaryData} />
+              {windowWidth && <PieChart data={summaryData} />}
             </div>
             <div className="mt-14 grid grid-cols-2 gap-2">
               <div className="bg-green-500 text-white p-2 text-center rounded-lg">
