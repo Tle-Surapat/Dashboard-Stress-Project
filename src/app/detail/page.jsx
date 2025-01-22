@@ -65,6 +65,9 @@ function DetailsPageContent() {
           setEdaData(allEdaData);
           setPpgData(allPpgData);
           setLoading(false);
+
+          console.log("EDA data: ", allEdaData);
+          console.log("PPG data: ", allPpgData);
         },
         (error) => {
           console.error("Error fetching data:", error);
