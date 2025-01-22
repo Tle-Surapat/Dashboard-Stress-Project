@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import dynamic from 'next/dynamic'; // Import for dynamic component loading
+import dynamic from 'next/dynamic';
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/components/firebase";
 import Navbar_DB from "@/components/Navbar_DB";
@@ -14,6 +14,7 @@ import Image from 'next/image';
 
 // Dynamically import components to avoid SSR issues
 const EDAChart = dynamic(() => import("@/components/Chart"), { ssr: false });
+const PPGChart = dynamic(() => import("@/components/Chart"), { ssr: false });
 const HistoryChart = dynamic(() => import("@/components/HistoryChart"), { ssr: false });
 
 function DetailsPageContent() {
@@ -140,23 +141,21 @@ function DetailsPageContent() {
             <h3 className="text-lg font-bold text-navy mb-4">EDA Signal</h3>
             {loading ? (
               <div className="text-center">Loading EDA data...</div>
-            ) : filteredEdaData.length > 0 ? (
-              <EDAChart edaData={filteredEdaData} />
             ) : (
-              <div className="text-center text-gray-500">No EDA data available.</div>
+              <EDAChart edaData={filteredEdaData} />
             )}
           </div>
         </div>
 
-        {/* User Info Section */}
+        {/* PPG Signal Section */}
         <div className="w-full md:w-1/2 p-4 flex flex-col justify-between">
-          <div className="bg-gray-200 rounded-lg shadow-md p-6 text-center">
-            <div className="flex justify-center mb-4">
-              <Image src="/profile.png" alt="Profile" width={96} height={96} className="rounded-full" priority />
-            </div>
-            <h2 className="text-xl font-bold text-navy mb-4">{name}</h2>
-            <p className="text-sm text-gray-700 mb-2">Age: {age} | Height: {height}</p>
-            <p className="text-sm text-gray-700 mb-2">Weight: {weight} | Congenital Diseases: {congenitalDiseases}</p>
+          <div className="bg-gray-200 rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-bold text-navy mb-4">PPG Signal</h3>
+            {loading ? (
+              <div className="text-center">Loading PPG data...</div>
+            ) : (
+              <PPGChart edaData={filteredPpgData} />
+            )}
           </div>
         </div>
 
