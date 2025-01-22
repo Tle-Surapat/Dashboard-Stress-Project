@@ -26,7 +26,7 @@ export default function AboutUs() {
             <h4 className="text-2xl font-semibold mb-4 text-yellow">Our Technology</h4>
             <ul className="text-white list-disc list-inside space-y-2">
               <li>Physiological Signal Monitoring: Our system collects data from wearable devices, analyzing patterns related to stress indicators.</li>
-              <li>Artificial Intelligence: Advanced AI algorithms detect stress levels with high precision, adapting to each individual's unique physiological responses.</li>
+              <li>Artificial Intelligence: Advanced AI algorithms detect stress levels with high precision, adapting to each individual unique physiological responses.</li>
               <li>Real-Time Insights: Users receive actionable feedback and stress management suggestions to help them stay balanced and focused.</li>
             </ul>
           </div>
