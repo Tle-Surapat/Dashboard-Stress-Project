@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from 'next/image';
+
 
 const slides = [
   { src: "/banner-1.png", alt: "Banner 1" },
@@ -30,7 +32,7 @@ export default function Banner() {
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
-            <img
+            <Image
               src={slide.src}
               alt={slide.alt}
               className="w-full h-full object-cover"

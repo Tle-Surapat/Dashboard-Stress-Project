@@ -11,6 +11,7 @@ import EDAChart from "@/components/Chart";
 import HistoryChart from "@/components/HistoryChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
 import { faBackward } from "@fortawesome/free-solid-svg-icons"; // Import the backward icon
+import Image from 'next/image';
 
 export default function DetailsPage() {
   const router = useRouter(); // Correct use of useRouter in Next.js 13+
@@ -155,7 +156,7 @@ export default function DetailsPage() {
           <div className="bg-gray-200 rounded-lg shadow-md p-6 text-center flex flex-col justify-between h-full">
             {/* Profile photo */}
             <div className="flex justify-center mb-4">
-              <img
+              <Image
                 src="/profile.png" // Add the path to the profile photo here
                 alt="Profile"
                 className="w-24 h-24 rounded-full" // Adjusted size and centering

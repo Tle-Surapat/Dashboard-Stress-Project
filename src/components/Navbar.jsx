@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className="bg-navy text-white sticky top-0 z-50 w-full px-4 md:px-8 py-3 flex items-center justify-between">
       {/* Logo */}
-      <img src="/logo.png" alt="logo" width="60" height="60" />
+      <Image src="/logo.png" alt="logo" width="60" height="60" />
       <h3 className="text-lg p-4">Senior Care Support</h3>
 
       {/* Links and Log In Button for Desktop */}
