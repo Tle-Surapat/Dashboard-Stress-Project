@@ -1,14 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation"; // Use next/navigation for app directory
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import Navbar_DB from "@/components/Navbar_DB";
 import Footer from "@/components/Footer";
-import { useState } from "react";
 import PieChart from "@/components/PieChart";
 import SubjectCard from "@/components/SubjectCard";
 
 export default function DashboardPage() {
     const router = useRouter();
+    const [windowWidth, setWindowWidth] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setWindowWidth(window.innerWidth);
+        }
+    }, []);
 
     const [summaryData, setSummaryData] = useState({
         normal: 4,
@@ -37,7 +44,9 @@ export default function DashboardPage() {
 
     const handleMoreClick = (subject) => {
         router.push(
-            `/detail?name=${encodeURIComponent(subject.name)}&age=${subject.age}&height=${subject.height}&stressLevel=${subject.stressLevel}&colors=${encodeURIComponent(stressLevelColors[subject.stressLevel])}`
+            `/detail?name=${encodeURIComponent(subject.name)}&age=${subject.age}&height=${subject.height}&stressLevel=${subject.stressLevel}&colors=${encodeURIComponent(
+                stressLevelColors[subject.stressLevel]
+            )}`
         );
     };
 
@@ -49,7 +58,7 @@ export default function DashboardPage() {
                 {/* Summary Section */}
                 <div className="w-full md:w-1/2 p-4">
                     <div className="bg-white rounded-lg p-10 shadow-md">
-                        <h2 className="text-3xl text-navy mb-4">Summary</h2>
+                        <h2 className="text-3xl text-blue-800 font-bold mb-4">Summary</h2>
                         <div className="mt-8 w-full h-auto">
                             <PieChart data={summaryData} />
                         </div>
@@ -73,8 +82,7 @@ export default function DashboardPage() {
                 {/* Stress Levels Section */}
                 <div className="w-full md:w-1/2 p-4">
                     <div className="bg-white rounded-lg p-10 shadow-md">
-                        <h2 className="text-3xl text-navy font-bold mb-4">Stress Levels</h2>
-                        {/* Grid Container */}
+                        <h2 className="text-3xl text-blue-800 font-bold mb-4">Stress Levels</h2>
                         <div className="grid grid-cols-2 gap-4 overflow-y-auto" style={{ maxHeight: "510px" }}>
                             {subjects
                                 .sort((a, b) => {
