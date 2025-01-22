@@ -3,14 +3,14 @@
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/components/firebase";
 import Navbar_DB from "@/components/Navbar_DB";
 import Footer from "@/components/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
-import Image from 'next/image';
+import Image from "next/image";
 
 // Dynamically import components to avoid SSR issues
 const EDAChart = dynamic(() => import("@/components/Chart"), { ssr: false });
@@ -20,13 +20,13 @@ const HistoryChart = dynamic(() => import("@/components/HistoryChart"), { ssr: f
 function DetailsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const name = searchParams.get("name") || "Unknown";
-  const age = searchParams.get("age") || "N/A";
-  const height = searchParams.get("height") || "N/A";
+  const name = searchParams.get("name") || "Subject T";
+  const age = searchParams.get("age") || "21";
+  const height = searchParams.get("height") || "181";
   const weight = searchParams.get("weight") || "65";
   const congenitalDiseases = searchParams.get("congenitalDiseases") || "N/A";
-  const stressLevel = searchParams.get("stressLevel") || "Normal";
-  const colors = searchParams.get("colors") || "bg-gray-200";
+  const stressLevel = searchParams.get("stressLevel") || "High";
+  const colors = searchParams.get("colors") || "bg-red text-white";
 
   const [edaData, setEdaData] = useState([]);
   const [ppgData, setPpgData] = useState([]);
@@ -36,7 +36,7 @@ function DetailsPageContent() {
 
   const stressManagementTips = {
     Low: "Maintain your healthy habits.",
-    Moderate: "Take breaks and practice relaxation techniques.",
+    Medium: "Take breaks and practice relaxation techniques.",
     High: "Deep breathing exercises, physical activity, meditation, and proper sleep can help reduce high stress levels.",
   };
 
@@ -116,51 +116,51 @@ function DetailsPageContent() {
         </div>
 
         {/* Prediction Section */}
-        <div className="w-full md:w-1/2 p-4 flex flex-col justify-between">
-          <div className="bg-gray-200 rounded-lg shadow-md p-6 text-navy">
+        <div className="w-full md:w-1/2 p-4 flex flex-col">
+          <div className="bg-gray-200 rounded-lg shadow-md p-6">
             <h3 className="text-lg font-bold text-navy mb-4">PREDICTION</h3>
             <div className="flex flex-row items-center gap-4">
               <div
                 className={`${colors} rounded-lg shadow-md p-4 w-30 h-30 flex items-center justify-center text-lg font-bold`}
-                aria-label={`Stress Level: ${stressLevel}`}
               >
                 {stressLevel}
               </div>
-              <div className="flex-grow">
-                <p className="text-gray-700 text-sm leading-relaxed px-4">
-                  {stressManagementTips[stressLevel] || "Stay calm and focus on self-care."}
-                </p>
-              </div>
+              <p className="text-gray-700 text-sm leading-relaxed px-4">
+                {stressManagementTips[stressLevel] || "Stay calm and focus on self-care."}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* EDA Signal Section */}
-        <div className="w-full md:w-1/2 p-4 flex flex-col justify-between">
+        {/* User Info Section */}
+        <div className="w-full md:w-1/2 p-4 flex flex-col">
+          <div className="bg-gray-200 rounded-lg shadow-md p-6 text-center">
+            <div className="flex justify-center mb-4">
+              <Image src="/profile.png" alt="Profile" width={96} height={96} className="rounded-full" priority />
+            </div>
+            <h2 className="text-xl font-bold text-navy mb-4">{name}</h2>
+            <p className="text-sm text-gray-700 mb-2">Age: {age} | Height: {height}</p>
+            <p className="text-sm text-gray-700 mb-2">Weight: {weight} | Congenital Diseases: {congenitalDiseases}</p>
+          </div>
+        </div>
+
+        {/* Signal Sections */}
+        <div className="w-full md:w-1/2 p-4">
           <div className="bg-gray-200 rounded-lg shadow-md p-6">
             <h3 className="text-lg font-bold text-navy mb-4">EDA Signal</h3>
-            {loading ? (
-              <div className="text-center">Loading EDA data...</div>
-            ) : (
-              <EDAChart edaData={filteredEdaData} />
-            )}
+            {loading ? <div className="text-center">Loading...</div> : <EDAChart edaData={filteredEdaData} />}
           </div>
         </div>
 
-        {/* PPG Signal Section */}
-        <div className="w-full md:w-1/2 p-4 flex flex-col justify-between">
+        <div className="w-full md:w-1/2 p-4">
           <div className="bg-gray-200 rounded-lg shadow-md p-6">
             <h3 className="text-lg font-bold text-navy mb-4">PPG Signal</h3>
-            {loading ? (
-              <div className="text-center">Loading PPG data...</div>
-            ) : (
-              <PPGChart edaData={filteredPpgData} />
-            )}
+            {loading ? <div className="text-center">Loading...</div> : <PPGChart edaData={filteredPpgData} />}
           </div>
         </div>
 
-        {/* History Chart Section */}
-        <div className="w-full p-4 flex flex-col justify-between">
+        {/* History Chart */}
+        <div className="w-full p-4">
           <div className="bg-gray-200 rounded-lg shadow-md p-8">
             <HistoryChart data={filteredHistoryData} />
           </div>
