@@ -1,20 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation"; // Correct import for Next.js 13+
+import { useRouter } from "next/navigation";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/components/firebase";
 import Navbar_DB from "@/components/Navbar_DB";
 import Footer from "@/components/Footer";
 import EDAChart from "@/components/Chart";
 import HistoryChart from "@/components/HistoryChart";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesomeIcon
-import { faBackward } from "@fortawesome/free-solid-svg-icons"; // Import the backward icon
-import Image from 'next/image';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBackward } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
-export default function DetailsPage() {
-  const router = useRouter(); // Correct use of useRouter in Next.js 13+
+function SearchParamsComponent() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "Unknown";
   const age = searchParams.get("age") || "N/A";
@@ -24,21 +23,28 @@ export default function DetailsPage() {
   const stressLevel = searchParams.get("stressLevel") || "Normal";
   const colors = searchParams.get("colors") || "bg-gray-200";
 
+  return { name, age, height, weight, congenitalDiseases, stressLevel, colors };
+}
+
+export default function DetailsPage() {
+  const router = useRouter();
+  const { name, age, height, weight, congenitalDiseases, stressLevel, colors } =
+    SearchParamsComponent();
+
   const [edaData, setEdaData] = useState([]);
   const [ppgData, setPpgData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [historyData, setHistoryData] = useState([]);
   const [filteredHistoryData, setFilteredHistoryData] = useState([]);
-  const [filter, setFilter] = useState("Week"); // Default filter
+  const [filter, setFilter] = useState("Week");
 
   const stressManagementTips = {
     Low: "Maintain your healthy habits.",
     Moderate: "Take breaks and practice relaxation techniques.",
-    High: "Managing high stress can be achieved through various strategies that promote relaxation and well-being. Deep breathing exercises can help calm the mind and reduce tension in the body. Regular physical activity, such as exercise, releases endorphins, which act as natural stress relievers. Meditation and mindfulness also help to focus the mind and foster inner peace. Talking to trusted individuals or engaging in hobbies can provide emotional support and distraction from stressors. Setting small, achievable goals creates a sense of accomplishment, while adequate sleep allows the body and mind to recharge, reducing stress and improving overall performance and well-being.",
+    High: "Managing high stress can be achieved through various strategies such as deep breathing, meditation, and regular exercise.",
   };
 
   useEffect(() => {
-    // Clear the data before fetching new data
     setEdaData([]);
     setPpgData([]);
     setLoading(true);
@@ -46,24 +52,17 @@ export default function DetailsPage() {
     const subcollectionRef = collection(db, "realtimedata");
 
     const unsubscribe = onSnapshot(subcollectionRef, (querySnapshot) => {
-      const allEdaData = [];
-      const allPpgData = [];
+      const newData = querySnapshot.docs.map((doc) => ({
+        time: new Date(doc.data().timestamp * 1000).toLocaleTimeString(),
+        edaValue: doc.data().EDA_mean,
+        ppgValue: doc.data().PPG_mean,
+      }));
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const timestamp = new Date(data.timestamp * 1000).toLocaleTimeString(); // Convert UNIX timestamp to readable time
-
-        // Push individual values to respective arrays
-        allEdaData.push({ time: timestamp, value: data.EDA_mean });
-        allPpgData.push({ time: timestamp, value: data.PPG_mean });
-      });
-
-      setEdaData(allEdaData);
-      setPpgData(allPpgData);
+      setEdaData((prev) => [...prev.slice(-10), ...newData]);
+      setPpgData((prev) => [...prev.slice(-10), ...newData]);
       setLoading(false);
     });
 
-    // Cleanup on unmount
     return () => unsubscribe();
   }, []);
 
@@ -76,39 +75,28 @@ export default function DetailsPage() {
       { day: "Day 5", low: 13, medium: 5, high: 2 },
       { day: "Day 6", low: 9, medium: 6, high: 5 },
       { day: "Day 7", low: 11, medium: 7, high: 3 },
-      { day: "Day 8", low: 12, medium: 6, high: 4 },
-      { day: "Day 9", low: 10, medium: 8, high: 5 },
-      { day: "Day 10", low: 14, medium: 4, high: 6 },
-      { day: "Day 11", low: 8, medium: 7, high: 3 },
-      { day: "Day 12", low: 13, medium: 5, high: 2 },
-      { day: "Day 13", low: 9, medium: 6, high: 5 },
-      { day: "Day 14", low: 11, medium: 7, high: 3 },
     ];
     setHistoryData(simulatedHistory);
-    setFilteredHistoryData(simulatedHistory); // Default to show all data
+    setFilteredHistoryData(simulatedHistory);
   }, []);
 
   useEffect(() => {
     if (filter === "Week") {
-      setFilteredHistoryData(historyData.slice(0, 7)); // Show last 7 days
-    } else if (filter === "Month") {
-      setFilteredHistoryData(historyData); // Show all (simulate a month)
+      setFilteredHistoryData(historyData.slice(0, 7));
+    } else {
+      setFilteredHistoryData(historyData);
     }
   }, [filter, historyData]);
 
-  const filteredEdaData = edaData.slice(-10);
-  const filteredPpgData = ppgData.slice(-10);
-
   const handleBackClick = () => {
-    router.push("/dashboard"); // Correct path for dashboard navigation
+    router.push("/dashboard");
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       <Navbar_DB />
       <div className="flex flex-wrap px-8 py-6">
-        {/* back button */}
-        <div className="w-full p-4 flex ">
+        <div className="w-full p-4 flex">
           <button
             onClick={handleBackClick}
             className="bg-navy text-white py-2 px-4 rounded-lg shadow-md"
@@ -118,7 +106,10 @@ export default function DetailsPage() {
         </div>
 
         {/* Prediction Section */}
-        <div className="w-full md:w-1/2 p-4 flex flex-col justify-between" style={{ height: 'fit-content' }}>
+        <div
+          className="w-full md:w-1/2 p-4 flex flex-col justify-between"
+          style={{ height: "fit-content" }}
+        >
           <div className="bg-gray-200 rounded-lg shadow-md p-6 text-navy">
             <h3 className="text-lg font-bold text-navy mb-4">PREDICTION</h3>
             <div className="flex flex-row items-center gap-4">
@@ -138,13 +129,13 @@ export default function DetailsPage() {
         </div>
 
         {/* EDA Signal Section */}
-        <div className="w-full md:w-1/2 p-4 flex flex-col justify-between" style={{ height: 'fit-content' }}>
+        <div className="w-full md:w-1/2 p-4">
           <div className="bg-gray-200 rounded-lg shadow-md p-6">
             <h3 className="text-lg font-bold text-navy mb-4">EDA Signal</h3>
             {loading ? (
               <div className="text-center">Loading EDA data...</div>
-            ) : filteredEdaData.length > 0 ? (
-              <EDAChart edaData={filteredEdaData} />
+            ) : edaData.length > 0 ? (
+              <EDAChart edaData={edaData} />
             ) : (
               <div className="text-center text-gray-500">No EDA data available.</div>
             )}
@@ -152,47 +143,34 @@ export default function DetailsPage() {
         </div>
 
         {/* User Info Section */}
-        <div className="w-full md:w-1/2 p-4 flex flex-col justify-between" style={{ height: '100%' }}>
-          <div className="bg-gray-200 rounded-lg shadow-md p-6 text-center flex flex-col justify-between h-full">
-            {/* Profile photo */}
+        <div className="w-full md:w-1/2 p-4">
+          <div className="bg-gray-200 rounded-lg shadow-md p-6 text-center">
             <div className="flex justify-center mb-4">
               <Image
-                src="/profile.png" // Add the path to the profile photo here
+                src="/profile.png"
                 alt="Profile"
-                className="w-24 h-24 rounded-full" // Adjusted size and centering
+                width={96}
+                height={96}
+                className="rounded-full"
               />
             </div>
-            <div>
-              {/* Name, Age, Height, Weight, Congenital Diseases */}
-              <h2 className="text-xl font-bold text-navy mb-4">{name}</h2>
-              <p className="text-sm text-gray-700 mb-2">Age: {age} | Height: {height}</p>
-              <p className="text-sm text-gray-700 mb-2">Weight: {weight} | Congenital Diseases: {congenitalDiseases}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* PPG Signal Section */}
-        <div className="w-full md:w-1/2 p-4 flex flex-col justify-between" style={{ height: 'fit-content' }}>
-          <div className="bg-gray-200 rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-bold text-navy mb-4">PPG Signal</h3>
-            {loading ? (
-              <div className="text-center">Loading PPG data...</div>
-            ) : filteredPpgData.length > 0 ? (
-              <EDAChart edaData={filteredPpgData} />
-            ) : (
-              <div className="text-center text-gray-500">No PPG data available.</div>
-            )}
+            <h2 className="text-xl font-bold text-navy mb-4">{name}</h2>
+            <p className="text-sm text-gray-700 mb-2">
+              Age: {age} | Height: {height}
+            </p>
+            <p className="text-sm text-gray-700 mb-2">
+              Weight: {weight} | Congenital Diseases: {congenitalDiseases}
+            </p>
           </div>
         </div>
 
         {/* History Chart Section */}
-        <div className="w-full p-4 flex flex-col justify-between" style={{ height: 'fit-content' }}>
+        <div className="w-full p-4">
           <div className="bg-gray-200 rounded-lg shadow-md p-8">
-            {/* Title and Filter Menu */}
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-2xl text-navy font-bold">HISTORY</h3>
               <select
-                className="bg-white border border-gray-300 text-gray-700 p-2 rounded-lg shadow-sm"
+                className="bg-white border border-gray-300 text-gray-700 p-2 rounded-lg"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               >
@@ -200,8 +178,6 @@ export default function DetailsPage() {
                 <option value="Month">Month</option>
               </select>
             </div>
-
-            {/* History Chart */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <HistoryChart data={filteredHistoryData} />
             </div>

@@ -1,6 +1,7 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
-import { useRouter } from "next/navigation"; // Use next/navigation for app directory
+import { useRouter } from "next/navigation";
 import Navbar_DB from "@/components/Navbar_DB";
 import Footer from "@/components/Footer";
 import { useState } from "react";
@@ -26,24 +27,23 @@ export default function DashboardPage() {
         { name: "Subject F", age: 20, height: 177, stressLevel: "Medium" },
         { name: "Subject G", age: 22, height: 170, stressLevel: "High" },
         { name: "Subject H", age: 21, height: 180, stressLevel: "Normal" },
-        { name: "Subject H", age: 21, height: 180, stressLevel: "Normal" },
-        { name: "Subject H", age: 21, height: 180, stressLevel: "Normal" },
-        { name: "Subject H", age: 21, height: 180, stressLevel: "Normal" },
-        { name: "Subject H", age: 21, height: 180, stressLevel: "Normal" },
         { name: "Subject T", age: 21, height: 181, stressLevel: "High" },
     ];
 
+    // Tailwind-compatible stress level color mapping
     const stressLevelColors = {
-        High: "bg-red text-white",
-        Medium: "bg-orange text-black",
-        Low: "bg-yellow text-black",
-        Normal: "bg-green text-white",
+        High: "bg-red-500 text-white",
+        Medium: "bg-orange-500 text-black",
+        Low: "bg-yellow-400 text-black",
+        Normal: "bg-green-500 text-white",
     };
 
     const handleMoreClick = (subject) => {
-        router.push(
-            `/detail?name=${encodeURIComponent(subject.name)}&age=${subject.age}&height=${subject.height}&stressLevel=${subject.stressLevel}&colors=${encodeURIComponent(stressLevelColors[subject.stressLevel])}`
-        );
+        if (typeof window !== "undefined") {
+            router.push(
+                `/detail?name=${encodeURIComponent(subject.name)}&age=${subject.age}&height=${subject.height}&stressLevel=${subject.stressLevel}&colors=${encodeURIComponent(stressLevelColors[subject.stressLevel])}`
+            );
+        }
     };
 
     return (
@@ -54,21 +54,21 @@ export default function DashboardPage() {
                 {/* Summary Section */}
                 <div className="w-full md:w-1/2 p-4">
                     <div className="bg-white rounded-lg p-10 shadow-md">
-                        <h2 className="text-3xl text-navy  mb-4">Summary</h2>
+                        <h2 className="text-3xl text-navy mb-4">Summary</h2>
                         <div className="mt-8 w-full h-auto">
                             <PieChart data={summaryData} />
                         </div>
                         <div className="mt-14 grid grid-cols-2 gap-2">
-                            <div className="bg-green text-white p-2 text-center rounded-lg">
+                            <div className="bg-green-500 text-white p-2 text-center rounded-lg">
                                 NORMAL: {summaryData.normal} PEOPLE
                             </div>
-                            <div className="bg-yellow text-black p-2 text-center rounded-lg">
+                            <div className="bg-yellow-400 text-black p-2 text-center rounded-lg">
                                 LOW: {summaryData.low} PEOPLE
                             </div>
-                            <div className="bg-orange text-white p-2 text-center rounded-lg">
+                            <div className="bg-orange-500 text-black p-2 text-center rounded-lg">
                                 MEDIUM: {summaryData.medium} PERSON
                             </div>
-                            <div className="bg-red text-black p-2 text-center rounded-lg">
+                            <div className="bg-red-500 text-white p-2 text-center rounded-lg">
                                 HIGH: {summaryData.high} PEOPLE
                             </div>
                         </div>
@@ -79,7 +79,6 @@ export default function DashboardPage() {
                 <div className="w-full md:w-1/2 p-4">
                     <div className="bg-white rounded-lg p-10 shadow-md">
                         <h2 className="text-3xl text-navy font-bold mb-4">Stress Levels</h2>
-                        {/* Grid Container */}
                         <div
                             className="grid grid-cols-2 gap-4 overflow-y-auto"
                             style={{ maxHeight: "510px" }} // Adjusted height for 4 rows
@@ -91,7 +90,7 @@ export default function DashboardPage() {
                                 })
                                 .map((subject, index) => (
                                     <SubjectCard
-                                        key={index}
+                                        key={`${subject.name}-${index}`}
                                         subject={subject}
                                         color={stressLevelColors[subject.stressLevel]}
                                         onMoreClick={handleMoreClick}
@@ -100,8 +99,6 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 </div>
-
-
             </div>
 
             <Footer />
