@@ -1,5 +1,5 @@
 {
-  "name": "my-next-app",
+  "name": "Stress_Detection_Web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,14 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.1",
+    "@fortawesome/free-solid-svg-icons": "^6.7.1",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "apexcharts": "^4.1.0",
+    "autoprefixer": "^10.4.20",
+    "chart.js": "^4.4.7",
+    "firebase": "^11.1.0",
+    "flowbite": "^2.5.2",
+    "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
+    "react-apexcharts": "^1.7.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "next": "15.0.3"
+    "react-router-dom": "^7.0.2",
+    "recharts": "^2.14.1"
   },
   "devDependencies": {
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "15.0.3"
+    "eslint-config-next": "15.0.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16"
   }
 }

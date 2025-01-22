@@ -8,8 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        yellow: "#ffd664",
+        blue: "#2bbdf0",
+        blue_green: "#5bc6d2",
+        navy: "#0d4269",
+        green: "#8FD14F",
+        orange: "#FA812F",
+        red: "#FF2929"
+      },
+      fontFamily: {
+        sans: ['"Montserrat"', 'sans-serif'],  // Add Montserrat to the sans font family
       },
     },
   },
