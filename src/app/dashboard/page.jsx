@@ -23,9 +23,9 @@ const DashboardPage = () => {
     }, []);
 
     const summaryData = {
-        normal: 4,
-        low: 3,
-        medium: 1,
+        normal: 2,
+        low: 2,
+        medium: 2,
         high: 2,
     };
 
