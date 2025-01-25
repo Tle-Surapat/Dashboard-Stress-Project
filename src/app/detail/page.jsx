@@ -37,7 +37,7 @@ function DetailsPageContent() {
   const stressManagementTips = {
     Low: "Maintain your healthy habits.",
     Medium: "Take breaks and practice relaxation techniques.",
-    High: "Deep breathing exercises, physical activity, meditation, and proper sleep can help reduce high stress levels.",
+    High: "Managing stress effectively is essential for maintaining overall well-being. Engaging in regular physical exercise, such as yoga or jogging, can help release endorphins and improve mood. Practicing mindfulness techniques, including deep breathing and meditation, allows individuals to stay present and reduce anxiety. Additionally, maintaining a healthy work-life balance and seeking social support from friends and family can provide emotional relief and perspective.",
   };
 
   useEffect(() => {
@@ -81,13 +81,13 @@ function DetailsPageContent() {
 
   useEffect(() => {
     const simulatedHistory = [
-      { day: "Day 1", low: 12, medium: 6, high: 4 },
-      { day: "Day 2", low: 10, medium: 8, high: 5 },
-      { day: "Day 3", low: 14, medium: 4, high: 6 },
-      { day: "Day 4", low: 8, medium: 7, high: 3 },
-      { day: "Day 5", low: 13, medium: 5, high: 2 },
-      { day: "Day 6", low: 9, medium: 6, high: 5 },
-      { day: "Day 7", low: 11, medium: 7, high: 3 },
+      { day: "Day 1", normal: 18, low: 8, medium: 2, high: 0 },
+      { day: "Day 2", normal: 16, low: 7, medium: 3, high: 1 },
+      { day: "Day 3", normal: 17, low: 6, medium: 4, high: 2 },
+      { day: "Day 4", normal: 19, low: 8, medium: 3, high: 1 },
+      { day: "Day 5", normal: 15, low: 10, medium: 5, high: 3 },
+      { day: "Day 6", normal: 17, low: 9, medium: 3, high: 2 },
+      { day: "Day 7", normal: 18, low: 5, medium: 4, high: 1 },
     ];
     setHistoryData(simulatedHistory);
   }, []);
@@ -139,7 +139,7 @@ function DetailsPageContent() {
         <div className="w-full md:w-1/2 p-4 flex flex-col">
           <div className="bg-gray-200 h-60 rounded-lg shadow-md p-6 text-center">
             <div className="flex justify-center mb-4">
-              <Image src="/profile.JPG" alt="Profile" width={96} height={96} className="rounded-full" priority />
+              <Image src="/profile.png" alt="Profile" width={100} height={100} className="rounded-full" priority />
             </div>
             <h2 className="text-xl font-bold text-navy mb-4">{name}</h2>
             <p className="text-sm text-gray-700 mb-2">Age: {age} | Height: {height}</p>

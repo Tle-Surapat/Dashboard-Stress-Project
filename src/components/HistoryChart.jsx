@@ -9,7 +9,7 @@ export default function HistoryChart({ data }) {
     datasets: [
       {
         label: "Normal",
-        data: data.map((item) => item.low),
+        data: data.map((item) => item.normal),
         backgroundColor: "green",
       },
       {

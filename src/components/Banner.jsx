@@ -5,9 +5,9 @@ import Image from 'next/image';
 
 
 const slides = [
-  { src: "/banner-1.png", alt: "Banner 1" },
-  { src: "/banner-2.png", alt: "Banner 2" },
-  { src: "/banner-3.png", alt: "Banner 3" },
+  { src: "/banner-1.png", alt: "Banner 1", width: 800, height: 400 },
+  { src: "/banner-2.png", alt: "Banner 2", width: 800, height: 400 },
+  { src: "/banner-3.png", alt: "Banner 3", width: 800, height: 400 },
 ];
 
 export default function Banner() {
@@ -28,15 +28,16 @@ export default function Banner() {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 duration-700 ease-in-out ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 duration-700 ease-in-out ${index === currentSlide ? "opacity-100" : "opacity-0"
+              }`}
           >
             <Image
               src={slide.src}
               alt={slide.alt}
-              className="w-full h-full object-cover"
+              layout="fill"
+              objectFit="cover"
             />
+
           </div>
         ))}
 
@@ -45,9 +46,8 @@ export default function Banner() {
           {slides.map((_, index) => (
             <button
               key={index}
-              className={`w-3 h-3 rounded-full ${
-                index === currentSlide ? "bg-yellow" : "bg-white"
-              }`}
+              className={`w-3 h-3 rounded-full ${index === currentSlide ? "bg-yellow" : "bg-white"
+                }`}
               aria-current={index === currentSlide}
               aria-label={`Slide ${index + 1}`}
               onClick={() => setCurrentSlide(index)}
