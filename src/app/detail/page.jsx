@@ -120,7 +120,7 @@ function DetailsPageContent() {
 
         {/* Prediction Section */}
         <div className="w-full md:w-1/2 p-4 flex flex-col">
-          <div className="bg-gray-200 rounded-lg shadow-md p-6">
+          <div className="bg-gray-200 h-60 rounded-lg shadow-md p-6">
             <h3 className="text-lg font-bold text-navy mb-4">PREDICTION</h3>
             <div className="flex flex-row items-center gap-4">
               <div
@@ -137,9 +137,9 @@ function DetailsPageContent() {
 
         {/* User Info Section */}
         <div className="w-full md:w-1/2 p-4 flex flex-col">
-          <div className="bg-gray-200 rounded-lg shadow-md p-6 text-center">
+          <div className="bg-gray-200 h-60 rounded-lg shadow-md p-6 text-center">
             <div className="flex justify-center mb-4">
-              <Image src="/profile.png" alt="Profile" width={96} height={96} className="rounded-full" priority />
+              <Image src="/profile.JPG" alt="Profile" width={96} height={96} className="rounded-full" priority />
             </div>
             <h2 className="text-xl font-bold text-navy mb-4">{name}</h2>
             <p className="text-sm text-gray-700 mb-2">Age: {age} | Height: {height}</p>
