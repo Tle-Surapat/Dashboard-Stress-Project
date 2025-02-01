@@ -49,9 +49,9 @@ const DashboardPage = () => {
                         allPpgData.push({ time: timestamp, value: data.PPG_mean });
 
                         let category = "Normal";
-                        if (data.PPG_mean > 91) category = "High";
-                        else if (data.PPG_mean > 82) category = "Medium";
-                        else if (data.PPG_mean > 72) category = "Low";
+                        if (data.EDA_mean > 0.3) category = "High";
+                        else if (data.EDA_mean > 0.2) category = "Medium";
+                        else if (data.EDA_mean > 0.1) category = "Low";
 
                         categorizedData.push({ time: timestamp, value: data.PPG_mean, category });
                     });
