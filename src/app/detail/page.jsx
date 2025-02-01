@@ -25,7 +25,7 @@ function DetailsPageContent() {
   const height = searchParams.get("height") || "181";
   const weight = searchParams.get("weight") || "65";
   const congenitalDiseases = searchParams.get("congenitalDiseases") || "N/A";
-  const stressLevel = searchParams.get("stressLevel") || "High";
+  const stressLevel = searchParams.get("stressLevel") || "Normal";
   const colors = searchParams.get("colors") || "bg-red text-white";
 
   const [edaData, setEdaData] = useState([]);
@@ -35,6 +35,7 @@ function DetailsPageContent() {
   const [filter, setFilter] = useState("Week");
 
   const stressManagementTips = {
+    normal: "",
     Low: "Maintain your healthy habits.",
     Medium: "Take breaks and practice relaxation techniques.",
     High: "Managing stress effectively is essential for maintaining overall well-being. Engaging in regular physical exercise, such as yoga or jogging, can help release endorphins and improve mood. Practicing mindfulness techniques, including deep breathing and meditation, allows individuals to stay present and reduce anxiety. Additionally, maintaining a healthy work-life balance and seeking social support from friends and family can provide emotional relief and perspective.",
