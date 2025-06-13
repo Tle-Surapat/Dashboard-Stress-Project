@@ -183,12 +183,16 @@ export default function LoginPage() {
                 <Image
                   src="/skintype01.png"
                   alt="Skin Type Reference 1"
-                  className="w-full max-w-md object-contain rounded shadow"
+                  width={500}
+                  height={300}
+                  className="object-contain rounded shadow"
                 />
                 <Image
                   src="/skintype02.png"
                   alt="Skin Type Reference 2"
-                  className="w-full max-w-md object-contain rounded shadow"
+                  width={500}
+                  height={300}
+                  className="object-contain rounded shadow"
                 />
               </div>
             </div>
