@@ -12,7 +12,7 @@ const PieChart = ({ data }) => {
       },
     },
     labels: ["Normal", "Low", "Medium", "High"],
-    colors: ["#4CAF50", "#FFC107", "#FF9800", "#F44336"],
+    colors: ["#8FD14F", "#ffd664", "#FA812F", "#FF2929"],
     legend: {
       position: "bottom",
       markers: {

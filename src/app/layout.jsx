@@ -1,6 +1,7 @@
 import { Montserrat } from "next/font/google";
 import "./globals.css"; // Import your global CSS
 import "../components/fontawesome"; // Adjust the path to your fontawesome.js file
+import { Toaster } from 'react-hot-toast';
 
 // Correct font weight values (no `100 900`, use individual weights)
 const montserrat = Montserrat({
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${montserrat.variable} antialiased`}>
         {children}
+        <Toaster position="top-right" />
       </body>
     </html>
   );

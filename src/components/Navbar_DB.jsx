@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from 'next/image';
+import DateTimeDisplay from './DateTimeDisplay';
 
 export default function Navbar_DB() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,10 +12,12 @@ export default function Navbar_DB() {
     <nav className="bg-navy text-white sticky top-0 z-50 w-full px-4 md:px-8 py-3 flex items-center justify-between">
       {/* Logo */}
       <Image src="/logo.png" alt="logo" width="60" height="60" />
-      <h3 className="text-lg p-4">Senior Care Support</h3>
+      <h3 className="text-lg p-4">WU Senior Care Support</h3>
 
       {/* Links and Log In Button for Desktop */}
       <div className="hidden md:flex items-center space-x-4 md:space-x-6 ml-auto">
+        <p>Name: Mallika Kliangkhlao</p>
+        <DateTimeDisplay />
         <Link href="/">
           <button className="bg-red text-white font-bold px-4 py-2 rounded-lg hover:bg-white hover:text-red transition-all duration-200 text-sm md:text-base">
             LOG OUT

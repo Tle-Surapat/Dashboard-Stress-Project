@@ -14,19 +14,18 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-const EDAChart = ({ edaData, loading }) => {
-  // Calculate min and max dynamically from edaData
-  const dataValues = edaData.map((item) => item.value);
+const SignalChart = ({ data, label, color, loading }) => {
+  const dataValues = data.map((item) => item.value);
   const minValue = Math.min(...dataValues);
   const maxValue = Math.max(...dataValues);
 
   const chartData = {
-    labels: edaData.map((item) => item.time),
+    labels: data.map((item) => item.time),
     datasets: [
       {
-        label: "Signal",
+        label,
         data: dataValues,
-        borderColor: "teal",
+        borderColor: color,
         tension: 0.3,
         pointRadius: 0,
         borderWidth: 2,
@@ -39,13 +38,11 @@ const EDAChart = ({ edaData, loading }) => {
     responsive: true,
     animation: false,
     scales: {
-      x: {
-        title: { display: true, text: "Time" },
-      },
+      x: { title: { display: true, text: "Time" } },
       y: {
         title: { display: true, text: "Value" },
-        min: minValue - (0.1 * Math.abs(minValue)), // Add padding below the min value
-        max: maxValue + (0.1 * Math.abs(maxValue)), // Add padding above the max value
+        min: minValue - (0.1 * Math.abs(minValue)),
+        max: maxValue + (0.1 * Math.abs(maxValue)),
       },
     },
     plugins: {
@@ -65,4 +62,4 @@ const EDAChart = ({ edaData, loading }) => {
   );
 };
 
-export default EDAChart;
+export default SignalChart;
