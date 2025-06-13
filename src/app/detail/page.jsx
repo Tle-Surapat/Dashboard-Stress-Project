@@ -500,8 +500,7 @@ const aggregatePredictionHistory = (predictions, timeframe, dateRange = null) =>
   });
 };
 
-export default function DetailPage() {
-  const searchParams = useSearchParams();
+export default function DetailPage({ searchParams }) {
   const router = useRouter();
   const deviceId = searchParams.get("device_id");
 
@@ -853,10 +852,12 @@ export default function DetailPage() {
   }, [deviceId]);
 
   // Set up continuous prediction interval
-  useEffect(() => {
-    if (personalData.weight && personalData.height && deviceId) {
+  useDeepCompareEffect(() => {
+    if (personalData?.weight != null && personalData?.height != null && deviceId) {
       const controller = new AbortController();
-      
+
+      performStressPrediction(personalData, deviceId, controller.signal);
+
       predictionIntervalRef.current = setInterval(() => {
         performStressPrediction(personalData, deviceId, controller.signal);
       }, 60000);
