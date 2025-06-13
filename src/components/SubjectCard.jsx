@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const SubjectCard = ({ subject, color = "bg-gray-300", onMoreClick, imageSrc }) => {
   return (
     <div className="w-full max-w-full sm:max-w-xs md:max-w-sm lg:max-w-md mx-auto rounded-xl shadow-md overflow-hidden border">
@@ -5,11 +7,12 @@ const SubjectCard = ({ subject, color = "bg-gray-300", onMoreClick, imageSrc }) 
       <div className={`flex items-center justify-between p-4 ${color}`}>
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full bg-white overflow-hidden">
-            <img
+            <Image
               src={imageSrc}
-              onError={(e) => { e.target.src = "/profiles/default.png"; }}
               alt={`${subject.name} avatar`}
-              className="w-full h-full object-cover"
+              width={200}
+              height={200}
+              className="object-cover rounded-md"
             />
           </div>
         </div>

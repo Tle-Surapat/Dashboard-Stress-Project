@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef, use } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -53,6 +53,8 @@ const DashboardPage = () => {
       // ไม่แจ้งเตือนเมื่อเป็น low
     }, [newPrediction]);
   };
+
+  const notify = useStressNotification();
 
   // Function to perform stress prediction (moved outside useEffect)
   const performStressPrediction = async (personalData, deviceId) => {
@@ -108,7 +110,7 @@ const DashboardPage = () => {
           
           setPredictionHistory(prev => [...prev, newHistoryEntry]);
 
-          useStressNotification(newPrediction);
+          notify(newPrediction);
           
           previousStressLevelRef.current = newPrediction;
         }

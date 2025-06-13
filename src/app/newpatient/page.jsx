@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar_DB";
 import Footer from "@/components/Footer";
 import toast, { Toaster } from "react-hot-toast";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -179,12 +180,12 @@ export default function LoginPage() {
                 Skin Type Reference
               </label>
               <div className="space-y-4">
-                <img
+                <Image
                   src="/skintype01.png"
                   alt="Skin Type Reference 1"
                   className="w-full max-w-md object-contain rounded shadow"
                 />
-                <img
+                <Image
                   src="/skintype02.png"
                   alt="Skin Type Reference 2"
                   className="w-full max-w-md object-contain rounded shadow"
