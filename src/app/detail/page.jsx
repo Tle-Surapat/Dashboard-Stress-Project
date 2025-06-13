@@ -16,6 +16,7 @@ import "react-date-range/dist/theme/default.css";
 import { toast } from 'react-hot-toast';
 import HistoryChart from "@/components/HistoryChart.jsx";
 import EditProfileModal from "@/components/EditProfileModal";
+import { useRouter } from 'next/navigation';
 
 const SignalChart = dynamic(() => import("@/components/Chart"), { ssr: false });
 
@@ -499,7 +500,7 @@ const aggregatePredictionHistory = (predictions, timeframe, dateRange = null) =>
 
 export default function DetailPage({ searchParams }) {
   const deviceId = searchParams?.device_id;
-
+  const router = useRouter();
   const [stressPrediction, setStressPrediction] = useState("normal");
   const [predictionHistory, setPredictionHistory] = useState([]);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -905,6 +906,8 @@ export default function DetailPage({ searchParams }) {
 
   const defaultProfileUrl = "/profiles/default.png"; // fallback
 
+  const imageUrl = deviceImageMap[deviceId] || defaultImage;
+
   const handleExport = async () => {
     if (isExporting) return;
     setIsExporting(true);
@@ -975,7 +978,7 @@ export default function DetailPage({ searchParams }) {
             {/* Profile Image */}
             <div className="flex-shrink-0 mx-auto lg:mx-0">
               <Image
-                src="/profiles/MD-V5-0001071.png"
+                src={imageUrl}
                 width={180}
                 height={320}
                 alt="Profile"
