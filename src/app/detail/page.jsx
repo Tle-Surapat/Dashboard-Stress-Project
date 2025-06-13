@@ -2,9 +2,8 @@
 "use client";
 
 import React, { useEffect, useState, useRef, Suspense }  from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { DateRange } from "react-date-range";
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import { exportPDFReport } from "@/lib/exportPDFReport";
 import Navbar_DB from "@/components/Navbar_DB";
 import Footer from "@/components/Footer";
@@ -14,11 +13,9 @@ import { faDownload, faArrowLeft, faEdit } from "@fortawesome/free-solid-svg-ico
 import { Activity, AlertCircle, Calendar, TrendingUp } from "lucide-react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { aggregateStressData } from "@/lib/aggregateStressData";
 import { toast } from 'react-hot-toast';
 import HistoryChart from "@/components/HistoryChart.jsx";
 import EditProfileModal from "@/components/EditProfileModal";
-import { set } from "date-fns";
 
 const SignalChart = dynamic(() => import("@/components/Chart"), { ssr: false });
 
@@ -501,8 +498,7 @@ const aggregatePredictionHistory = (predictions, timeframe, dateRange = null) =>
 };
 
 export default function DetailPage({ searchParams }) {
-  const router = useRouter();
-  const deviceId = searchParams.get("device_id");
+  const deviceId = searchParams?.device_id;
 
   const [stressPrediction, setStressPrediction] = useState("normal");
   const [predictionHistory, setPredictionHistory] = useState([]);
@@ -665,43 +661,38 @@ export default function DetailPage({ searchParams }) {
 
       const predictionJson = await predictionRes.json();
       console.log("Prediction response:", predictionJson);
+      const newPrediction = predictionJson.predicted_label?.toLowerCase();
 
       if (predictionJson.predicted_class <= 3 && predictionJson.predicted_class >= 0) {
-        const newPrediction = predictionJson.predicted_label.toLowerCase();
-        
-        // Only add to history if stress level changed
+        // เก็บ prediction ทุกรอบลง history
+        const newHistoryEntry = {
+          prediction: newPrediction,
+          timestamp: new Date().toISOString(),
+          bmi: payload.bmi,
+          deviceId: payload.deviceId
+        };
+
+        setPredictionHistory(prev => [...prev, newHistoryEntry]); // ✅ Always add
+
+        // อัปเดตค่าหลัก
+        setStressPrediction(newPrediction);
+
+        // แจ้งเตือนเฉพาะตอนเปลี่ยนระดับ
         const prevLevel = previousStressLevelRef.current;
         if (newPrediction !== prevLevel) {
-          setStressPrediction(newPrediction);
-          console.log("New stress prediction:", newPrediction);
-          
-          // Add to prediction history only when level changes
-          const newHistoryEntry = {
-            prediction: newPrediction,
-            timestamp: new Date().toISOString(),
-            bmi: payload.bmi,
-            deviceId: payload.deviceId
-          };
-          
-          setPredictionHistory(prev => [...prev, newHistoryEntry]);
-
-          // Handle stress level alerts
           if (newPrediction === 'high') {
             toast.error('🚨 Predicted Stress Level: HIGH', { duration: 5000 });
-            if (prevLevel !== 'high') {
-              const audio = new Audio('/alert.mp3');
-              audio.play().catch(err => console.error("Audio error:", err));
-            }
+            const audio = new Audio('/alert.mp3');
+            audio.play().catch(err => console.error("Audio error:", err));
           } else if (newPrediction === 'medium') {
             toast('⚠️ Predicted Stress Level: MEDIUM', { duration: 5000 });
           } else if (newPrediction === 'low') {
             toast('📊 Predicted Stress Level: LOW', { duration: 3000 });
           }
-          
+
           previousStressLevelRef.current = newPrediction;
         }
       } else {
-        console.warn("No prediction in response");
         setStressPrediction("normal");
       }
     } catch (error) {
@@ -843,7 +834,7 @@ export default function DetailPage({ searchParams }) {
     };
 
     fetchSensorData();
-    intervalId = setInterval(fetchSensorData, 500); // Fetch every 1 seconds
+    intervalId = setInterval(fetchSensorData, 1000); // Fetch every 1 seconds
 
     return () => {
       clearInterval(intervalId);
@@ -859,6 +850,7 @@ export default function DetailPage({ searchParams }) {
       performStressPrediction(personalData, deviceId, controller.signal);
 
       predictionIntervalRef.current = setInterval(() => {
+        console.log("Interval running");
         performStressPrediction(personalData, deviceId, controller.signal);
       }, 60000);
 
@@ -958,7 +950,6 @@ export default function DetailPage({ searchParams }) {
 
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
   <div className="min-h-screen bg-[#f6f8fc] text-black">
     <Navbar_DB />
     
@@ -973,18 +964,7 @@ export default function DetailPage({ searchParams }) {
           Back
         </button>
         
-        <button
-          className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
-            isExporting 
-              ? "bg-gray-400 cursor-not-allowed" 
-              : "bg-navy hover:bg-blue-700 text-white"
-          }`}
-          onClick={handleExport}
-          disabled={isExporting}
-        >
-          <FontAwesomeIcon icon={faDownload} /> 
-          {isExporting ? "Exporting..." : "Report Download"}
-        </button>
+        
       </div>
 
       {/* Information Cards Section */}
@@ -1454,6 +1434,5 @@ export default function DetailPage({ searchParams }) {
     </div>
     <Footer />
   </div>
-  </Suspense>
 );
 }

@@ -29,7 +29,7 @@ const DashboardPage = () => {
     const prevLevelRef = useRef(null);
     const counterRef = useRef(0);
 
-    useEffect(() => {
+    const notify = (newPrediction) => {
       const prevLevel = prevLevelRef.current;
 
       // ถ้าระดับเหมือนเดิม → เพิ่ม counter
@@ -51,7 +51,8 @@ const DashboardPage = () => {
       }
 
       // ไม่แจ้งเตือนเมื่อเป็น low
-    }, [newPrediction]);
+    };
+    return notify;
   };
 
   const notify = useStressNotification();

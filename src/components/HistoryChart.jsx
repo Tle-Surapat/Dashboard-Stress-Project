@@ -36,7 +36,6 @@ function aggregateStressData(flatData) {
   return result;
 }
 
-
 const HistoryChart = forwardRef(({ data, groupBy = 'day' }, ref) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
@@ -45,7 +44,7 @@ const HistoryChart = forwardRef(({ data, groupBy = 'day' }, ref) => {
   const isFlatData = data?.length > 0 && data[0].level !== undefined;
   
   // Use sample data if no data provided
-  const rawData = isFlatData ? data : (data?.length === 0 ? sampleData : []);
+  const rawData = isFlatData ? data : (data?.length === 0);
   const aggregated = aggregateStressData(rawData);
 
   // Handle responsive sizing
