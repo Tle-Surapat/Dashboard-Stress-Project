@@ -1,7 +1,7 @@
 // components/StressReportPage.jsx
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Suspense }  from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { DateRange } from "react-date-range";
@@ -500,7 +500,7 @@ const aggregatePredictionHistory = (predictions, timeframe, dateRange = null) =>
   });
 };
 
-export default function StressReportPage() {
+export default function DetailPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const deviceId = searchParams.get("device_id");
@@ -957,6 +957,7 @@ export default function StressReportPage() {
 
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
   <div className="min-h-screen bg-[#f6f8fc] text-black">
     <Navbar_DB />
     
@@ -1450,8 +1451,8 @@ export default function StressReportPage() {
         </div>
       </div>
     </div>
-    
     <Footer />
   </div>
+  </Suspense>
 );
 }
